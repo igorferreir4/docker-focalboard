@@ -1,6 +1,6 @@
 # Deploy Focalboard with Docker
 
-## Docker
+## Docker:
 
 The Dockerfile gives a quick and easy way to build the latest Focalboard server and deploy it locally. In the example below,
 the Focalboard database and files will be persisted in a named volumed called `fbdata`.

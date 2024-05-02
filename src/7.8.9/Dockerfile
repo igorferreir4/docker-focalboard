@@ -15,11 +15,12 @@ FROM golang:1.18.3@sha256:b203dc573d81da7b3176264bfa447bd7c10c9347689be405403818
 WORKDIR /go/src/focalboard
 ADD . /go/src/focalboard
 
-# Get target architecture 
-ARG TARGETOS
-ARG TARGETARCH  
+# # Get target architecture 
+# ARG TARGETOS
+# ARG TARGETARCH  
 
-RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
+RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker 
+# os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
 FROM debian:buster-slim@sha256:5b0b1a9a54651bbe9d4d3ee96bbda2b2a1da3d2fa198ddebbced46dfdca7f216

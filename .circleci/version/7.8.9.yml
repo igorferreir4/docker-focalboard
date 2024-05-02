@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker buildx build -f docker/Dockerfile \
+            docker buildx build \
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker buildx build -f docker/Dockerfile \
+            docker buildx build \
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
@@ -98,7 +98,7 @@ jobs:
               for tag in $(echo $IMAGE_TAGS | tr "," " "); do
                 TAGS="$TAGS -t $IMAGE_REPO:$tag"
               done
-              docker buildx build -f docker/Dockerfile \
+              docker buildx build \
                   --build-arg BUILDKIT_INLINE_CACHE=0 \
                   --cache-from="$CACHE_REPO:$CACHE_AMD64" \
                   --cache-from="$CACHE_REPO:$CACHE_ARM64" \

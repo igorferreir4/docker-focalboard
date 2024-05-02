@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker buildx build -f docker/Dockerfile \
+            docker buildx build -f docker/Dockerfile --platform linux/amd64 \
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
@@ -71,7 +71,7 @@ jobs:
       - run:
           name: Build docker image
           command: |
-            docker buildx build -f docker/Dockerfile \
+            docker buildx build -f docker/Dockerfile --platform linux/arm64 \
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \

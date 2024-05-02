@@ -1,0 +1,14 @@
+version: 2.1
+
+setup: true
+
+orbs:
+  path-filtering: circleci/path-filtering@1.0.0
+
+workflows:
+  procurando-mudanças:
+    jobs:
+      - path-filtering/filter:
+          base-revision: main
+          config-path: .circleci/nada a fazer.yml
+          mapping: .circleci/mapping.conf

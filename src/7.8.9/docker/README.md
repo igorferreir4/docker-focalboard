@@ -1,6 +1,6 @@
 # Deploy Focalboard with Docker
 
-## Docker
+## Docker:
 
 The Dockerfile gives a quick and easy way to build the latest Focalboard server and deploy it locally. In the example below,
 the Focalboard database and files will be persisted in a named volumed called `fbdata`.
@@ -23,7 +23,7 @@ docker build -f docker/Dockerfile --platform linux/arm64 -t focalboard .
 docker run -it -v "fbdata:/opt/focalboard/data" -p 80:8000 focalboard
 ```
 
-## Docker-Compose
+## Docker-Compose:
 
 Docker-Compose provides the option to automate the build and run step, or even include some of the steps from the [personal server setup](https://www.focalboard.com/download/personal-edition/ubuntu/).
 

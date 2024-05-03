@@ -3,7 +3,10 @@ FROM alpine:latest as base
 WORKDIR /ci-build
 
 RUN apk add --no-cache --update nodejs npm git make musl-dev go && \
-    git clone https://github.com/mattermost/focalboard.git
+    git clone https://github.com/mattermost/focalboard.git && \
+    cd focalboard/server/services/store/sqlstore && \
+    sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
+    sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
 
 ### Webapp build
 FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild

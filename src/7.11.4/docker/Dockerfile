@@ -6,7 +6,7 @@ RUN apk add --no-cache --update nodejs npm git make musl-dev go && \
     git clone https://github.com/mattermost/focalboard.git
 
 ### Webapp build
-FROM node:alpine as nodebuild
+FROM node:20.12.2-buster-slim as nodebuild
 
 WORKDIR /webapp
 COPY --from=base /ci-build/focalboard/webapp/ /webapp
@@ -17,7 +17,7 @@ RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm run pack
 
 ### Go build
-FROM golang:alpine AS gobuild
+FROM golang:1.22.2 AS gobuild
 
 WORKDIR /go/src/focalboard
 COPY --from=base /ci-build/focalboard/ /go/src/focalboard

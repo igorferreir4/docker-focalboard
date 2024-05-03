@@ -42,7 +42,7 @@ jobs:
       CACHE_REPO: igorferreir4/buildcaches
       CACHE_TAG: focalboard-7.11.4-amd64
       CACHE_TAG_OLD: focalboard-7.8.9-amd64
-    working_directory: ~/project/src/7.11.4/docker
+    working_directory: ~/project/src/7.11.4
     steps:
       - checkout:
           path: ~/project
@@ -54,7 +54,7 @@ jobs:
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
-              --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max ../
+              --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
   v7114-cache-arm64:
     executor: docker-machine
@@ -63,7 +63,7 @@ jobs:
       CACHE_REPO: igorferreir4/buildcaches
       CACHE_TAG: focalboard-7.11.4-arm64
       CACHE_TAG_OLD: focalboard-7.8.9-arm64
-    working_directory: ~/project/src/7.11.4/docker
+    working_directory: ~/project/src/7.11.4
     steps:
       - checkout:
           path: ~/project
@@ -75,7 +75,7 @@ jobs:
               --build-arg BUILDKIT_INLINE_CACHE=0 \
               --cache-from="$CACHE_REPO:$CACHE_TAG_OLD" \
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
-              --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max ../
+              --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
   v7114-build-multi-arch:
     executor: docker-machine
@@ -86,7 +86,7 @@ jobs:
       CACHE_ARM64: focalboard-7.11.4-arm64
       IMAGE_REPO: igorferreir4/focalboard
       IMAGE_TAGS: 7.11.4,latest
-    working_directory: ~/project/src/7.11.4/docker
+    working_directory: ~/project/src/7.11.4
     steps:
       - checkout:
           path: ~/project
@@ -102,7 +102,7 @@ jobs:
                   --build-arg BUILDKIT_INLINE_CACHE=0 \
                   --cache-from="$CACHE_REPO:$CACHE_AMD64" \
                   --cache-from="$CACHE_REPO:$CACHE_ARM64" \
-                  --push --platform=linux/amd64,linux/arm64/v8 $TAGS ../
+                  --push --platform=linux/amd64,linux/arm64/v8 $TAGS .
 
   v7114-deploy:
     executor: docker-docker

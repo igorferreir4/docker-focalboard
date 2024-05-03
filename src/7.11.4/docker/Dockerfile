@@ -1,8 +1,8 @@
+### Github downloader
 FROM alpine:latest as base
 
 WORKDIR /ci-build
-
-RUN apk add --no-cache --update nodejs npm git make musl-dev go && \
+RUN apk add --no-cache --update git && \
     git clone https://github.com/mattermost/focalboard.git && \
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
@@ -32,7 +32,8 @@ ARG TARGETARCH
 RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
-FROM debian:buster-slim
+# FROM debian:buster-slim
+FROM alpine:3.19
 
 RUN mkdir -p /opt/focalboard/data/files
 RUN chown -R nobody:nogroup /opt/focalboard
@@ -45,8 +46,6 @@ COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/LICENSE.txt LICENS
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/docker/server_config.json config.json
 
 USER nobody
-
-EXPOSE 8000/tcp
 
 EXPOSE 8000/tcp 9092/tcp
 

@@ -26,8 +26,7 @@ COPY --from=base /ci-build/focalboard/ /go/src/focalboard
 ARG TARGETOS
 ARG TARGETARCH  
 
-RUN apk add make && \
-    EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
+RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
 FROM debian:buster-slim

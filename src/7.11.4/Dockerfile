@@ -2,13 +2,21 @@
 FROM alpine:latest as downloader
 
 WORKDIR /ci-build
-RUN apk add --no-cache --update unzip wget && \
-    wget https://github.com/mattermost/focalboard/archive/refs/tags/v7.11.4.zip && \
-    unzip v7.11.4.zip && \
+ADD 7.11.4.zip /ci-build
+RUN apk add --no-cache --update unzip && \
+    unzip 7.11.4.zip && \
     mv focalboard-7.11.4 focalboard && \
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
+
+# RUN apk add --no-cache --update unzip wget && \
+#     wget https://github.com/mattermost/focalboard/archive/refs/tags/v7.11.4.zip && \
+#     unzip v7.11.4.zip && \
+#     mv focalboard-7.11.4 focalboard && \
+#     cd focalboard/server/services/store/sqlstore && \
+#     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
+#     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
 
 ### Webapp build
 FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild

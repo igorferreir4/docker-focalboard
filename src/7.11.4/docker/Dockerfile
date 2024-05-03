@@ -1,15 +1,8 @@
-FROM alpine:latest as base
-
-WORKDIR /ci-build
-
-RUN apk add --no-cache --update nodejs npm git make musl-dev go && \
-    git clone https://github.com/mattermost/focalboard.git
-
 ### Webapp build
 FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild
 
 WORKDIR /webapp
-COPY --from=base /ci-build/focalboard/webapp/ /webapp
+ADD webapp/ /webapp
 
 ### 'CPPFLAGS="-DPNG_ARM_NEON_OPT=0"' Needed To Avoid Bug Described in: https://github.com/imagemin/optipng-bin/issues/118#issuecomment-1019838562
 ### Can be Removed when Ticket will be Closed
@@ -20,7 +13,7 @@ RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
 FROM golang:1.18.3@sha256:b203dc573d81da7b3176264bfa447bd7c10c9347689be40540381838d75eebef AS gobuild
 
 WORKDIR /go/src/focalboard
-COPY --from=base /ci-build/focalboard/ /go/src/focalboard
+ADD . /go/src/focalboard
 
 # Get target architecture 
 ARG TARGETOS

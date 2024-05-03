@@ -41,7 +41,7 @@ jobs:
     environment:
       CACHE_REPO: igorferreir4/buildcaches
       CACHE_TAG: focalboard-7.11.4-amd64
-      CACHE_TAG_OLD: focalboard-7.8.9-amd64
+      CACHE_TAG_OLD: focalboard-7.11.4-amd64
     working_directory: ~/project/src/7.11.4
     steps:
       - checkout:
@@ -62,7 +62,7 @@ jobs:
     environment:
       CACHE_REPO: igorferreir4/buildcaches
       CACHE_TAG: focalboard-7.11.4-arm64
-      CACHE_TAG_OLD: focalboard-7.8.9-arm64
+      CACHE_TAG_OLD: focalboard-7.11.4-arm64
     working_directory: ~/project/src/7.11.4
     steps:
       - checkout:
@@ -117,7 +117,7 @@ jobs:
             echo "$SSH_KEY" | base64 --decode >> ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             ssh-keyscan $SSH_HOST_IGOR_ARM >> ~/.ssh/known_hosts
-            ssh $SSH_USER@$SSH_HOST_IGOR_ARM "echo Executado em "$(date -d "-3 hours" +"%d/%m/%G - %Hh:%Mm:%Ss") - focalboard 7.8.9" >> circleci-data.txt"
+            ssh $SSH_USER@$SSH_HOST_IGOR_ARM "echo Executado em "$(date -d "-3 hours" +"%d/%m/%G - %Hh:%Mm:%Ss") - focalboard 7.11.4" >> circleci-data.txt"
       # - run:
       #     name: Deploy to my server
       #     command: |

@@ -1,5 +1,5 @@
-### Github source code downloader
-FROM alpine:latest as downloader
+### Source files
+FROM alpine:latest as base
 
 WORKDIR /ci-build
 ADD 7.11.4.zip /ci-build
@@ -10,19 +10,11 @@ RUN apk add --no-cache --update unzip && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
 
-# RUN apk add --no-cache --update unzip wget && \
-#     wget https://github.com/mattermost/focalboard/archive/refs/tags/v7.11.4.zip && \
-#     unzip v7.11.4.zip && \
-#     mv focalboard-7.11.4 focalboard && \
-#     cd focalboard/server/services/store/sqlstore && \
-#     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
-#     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
-
 ### Webapp build
 FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild
 
 WORKDIR /webapp
-COPY --from=downloader /ci-build/focalboard/webapp/ /webapp
+COPY --from=base /ci-build/focalboard/webapp/ /webapp
 
 ### 'CPPFLAGS="-DPNG_ARM_NEON_OPT=0"' Needed To Avoid Bug Described in: https://github.com/imagemin/optipng-bin/issues/118#issuecomment-1019838562
 ### Can be Removed when Ticket will be Closed
@@ -33,7 +25,7 @@ RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
 FROM golang:1.18.3@sha256:b203dc573d81da7b3176264bfa447bd7c10c9347689be40540381838d75eebef AS gobuild
 
 WORKDIR /go/src/focalboard
-COPY --from=downloader /ci-build/focalboard/ /go/src/focalboard
+COPY --from=base /ci-build/focalboard/ /go/src/focalboard
 
 # Get target architecture 
 ARG TARGETOS

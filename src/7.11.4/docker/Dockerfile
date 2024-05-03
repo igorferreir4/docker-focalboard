@@ -32,8 +32,7 @@ ARG TARGETARCH
 RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
-# FROM debian:buster-slim
-FROM alpine:3.19
+FROM debian:buster-slim
 
 RUN mkdir -p /opt/focalboard/data/files
 RUN chown -R nobody:nogroup /opt/focalboard
@@ -44,8 +43,6 @@ COPY --from=nodebuild --chown=nobody:nogroup /webapp/pack pack/
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/bin/docker/focalboard-server bin/
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/LICENSE.txt LICENSE.txt
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/docker/server_config.json config.json
-
-RUN chmod +x /opt/focalboard/bin/focalboard-server
 
 USER nobody
 

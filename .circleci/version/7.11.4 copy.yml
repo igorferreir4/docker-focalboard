@@ -36,7 +36,7 @@ commands:
             echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
 jobs:
-  v7_11_4-cache-amd64:
+  v7114-cache-amd64:
     executor: docker-machine
     environment:
       CACHE_REPO: igorferreir4/buildcaches
@@ -56,7 +56,7 @@ jobs:
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
               --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
-  v7_11_4-cache-arm64:
+  v7114-cache-arm64:
     executor: docker-machine
     resource_class: arm.large
     environment:
@@ -77,7 +77,7 @@ jobs:
               --cache-from="$CACHE_REPO:$CACHE_TAG" \
               --cache-to=type=registry,ref=$CACHE_REPO:$CACHE_TAG,mode=max .
 
-  v7_11_4-build-multi-arch:
+  v7114-build-multi-arch:
     executor: docker-machine
     resource_class: large
     environment:
@@ -104,7 +104,7 @@ jobs:
                   --cache-from="$CACHE_REPO:$CACHE_ARM64" \
                   --push --platform=linux/amd64,linux/arm64/v8 $TAGS .
 
-  v7_11_4-deploy:
+  v7114-deploy:
     executor: docker-docker
     steps:
       # - add_ssh_keys:
@@ -130,19 +130,19 @@ workflows:
         - << pipeline.parameters.build-and-push >>
         - << pipeline.parameters.run-all >>
     jobs:
-      - v7_11_4-cache-amd64:
+      - v7114-cache-amd64:
           context: docker-geral
 
-      - v7_11_4-cache-arm64:
+      - v7114-cache-arm64:
           context: docker-geral
 
-      - v7_11_4-build-multi-arch:
+      - v7114-build-multi-arch:
           context: docker-geral
           requires:
-            - v7_11_4-cache-amd64
-            - v7_11_4-cache-arm64
+            - v7114-cache-amd64
+            - v7114-cache-arm64
 
-      # - v7_11_4-deploy:
+      # - v789-deploy:
       #     context: docker-geral
       #     requires:
-      #       - v7_11_4-build-multi-arch
+      #       - v789-build-multi-arch

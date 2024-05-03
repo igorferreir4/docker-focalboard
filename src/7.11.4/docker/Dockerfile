@@ -45,6 +45,8 @@ COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/bin/docker/focalbo
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/LICENSE.txt LICENSE.txt
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/docker/server_config.json config.json
 
+RUN chmod +x /opt/focalboard/bin/focalboard-server
+
 USER nobody
 
 EXPOSE 8000/tcp 9092/tcp

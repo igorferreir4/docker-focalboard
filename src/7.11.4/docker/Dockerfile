@@ -29,17 +29,17 @@ RUN apk update && \
     libpng-dev \
     make \
     nasm && \
-    cd /tpm && mkdir teste && cd teste && \
+    cd /tmp && mkdir teste && cd teste && \
     git clone https://github.com/mattermost/focalboard && \
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go && \
-    cd /tpm && \
+    cd /tmp && \
     git clone https://github.com/mattermost/focalboard && \
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go && \
-    cd /tpm/focalboard/webapp && \
+    cd /tmp/focalboard/webapp && \
     CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm install && npm run pack
 
@@ -47,7 +47,7 @@ RUN apk update && \
 FROM golang:1.22.2-alpine3.19 AS gobuild
 
 WORKDIR /go/src/focalboard
-COPY --from=nodebuild /tpm/teste/focalboard/ /go/src/focalboard
+COPY --from=nodebuild /tmp/teste/focalboard/ /go/src/focalboard
 
 # Get target architecture 
 ARG TARGETOS
@@ -63,7 +63,7 @@ RUN chown -R nobody:nogroup /opt/focalboard
 
 WORKDIR /opt/focalboard
 
-COPY --from=nodebuild --chown=nobody:nogroup /tpm/focalboard/webapp/pack pack/
+COPY --from=nodebuild --chown=nobody:nogroup /tmp/focalboard/webapp/pack pack/
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/bin/docker/focalboard-server bin/
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/LICENSE.txt LICENSE.txt
 COPY --from=gobuild --chown=nobody:nogroup /go/src/focalboard/docker/server_config.json config.json

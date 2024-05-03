@@ -1,6 +1,5 @@
 ### Webapp build
-# FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild
-FROM node:22.1.0 as nodebuild
+FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db06c7a9a4 as nodebuild
 
 WORKDIR /webapp
 ADD webapp/ /webapp
@@ -11,18 +10,16 @@ RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm run pack
 
 ### Go build
-# FROM golang:1.18.3@sha256:b203dc573d81da7b3176264bfa447bd7c10c9347689be40540381838d75eebef AS gobuild
-FROM golang:1.22.2 AS gobuild
+FROM golang:1.18.3@sha256:b203dc573d81da7b3176264bfa447bd7c10c9347689be40540381838d75eebef AS gobuild
 
 WORKDIR /go/src/focalboard
 ADD . /go/src/focalboard
 
-# # Get target architecture 
+# Get target architecture 
 ARG TARGETOS
 ARG TARGETARCH  
 
-# RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
-RUN EXCLUDE_PLUGIN=1 EXCLUDE_SERVER=1 EXCLUDE_ENTERPRISE=1 make server-docker os=${TARGETOS} arch=${TARGETARCH}
+RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
 FROM debian:buster-slim@sha256:5b0b1a9a54651bbe9d4d3ee96bbda2b2a1da3d2fa198ddebbced46dfdca7f216

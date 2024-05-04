@@ -6,6 +6,7 @@ ADD 7.11.4.zip /ci-build
 RUN apk add --no-cache --update unzip && \
     unzip 7.11.4.zip && \
     mv focalboard-7.11.4 focalboard && \
+### Fix bug: https://github.com/mattermost/focalboard/pull/4950/commits/2186710f4750909c707f7d332f4c1917244440b4
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go

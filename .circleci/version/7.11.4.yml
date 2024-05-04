@@ -124,7 +124,7 @@ jobs:
       #       ssh $SSH_USER@$SSH_HOST_IGOR_ARM "~/50GB/docker/executar-docker-compose-up-d.sh >> ~/circleci.txt 2>&1"
 
 workflows:
-  focalboard-v7.11.4:
+  focalboard-v7_11_4:
     when: 
       or: 
         - << pipeline.parameters.build-and-push >>

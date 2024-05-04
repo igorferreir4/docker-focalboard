@@ -6,7 +6,7 @@ ADD 7.11.4.zip /ci-build
 RUN apk add --no-cache --update unzip && \
     unzip 7.11.4.zip && \
     mv focalboard-7.11.4 focalboard && \
-### Fix bug: https://github.com/mattermost/focalboard/pull/4950/commits/2186710f4750909c707f7d332f4c1917244440b4
+    # Fix bug: https://github.com/mattermost/focalboard/pull/4950/commits/2186710f4750909c707f7d332f4c1917244440b4
     cd focalboard/server/services/store/sqlstore && \
     sed -i 's/Update("FileInfo")./Update("file_info")./g' ./blocks.go && \
     sed -i 's/Set("DeleteAt", model.GetMillis())./Set("delete_at", model.GetMillis())./g' ./blocks.go
@@ -17,8 +17,8 @@ FROM node:16.3.0@sha256:ca6daf1543242acb0ca59ff425509eab7defb9452f6ae07c156893db
 WORKDIR /webapp
 COPY --from=base /ci-build/focalboard/webapp/ /webapp
 
-### 'CPPFLAGS="-DPNG_ARM_NEON_OPT=0"' Needed To Avoid Bug Described in: https://github.com/imagemin/optipng-bin/issues/118#issuecomment-1019838562
-### Can be Removed when Ticket will be Closed
+# 'CPPFLAGS="-DPNG_ARM_NEON_OPT=0"' Needed To Avoid Bug Described in: https://github.com/imagemin/optipng-bin/issues/118#issuecomment-1019838562
+# Can be Removed when Ticket will be Closed
 RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm run pack
 
@@ -34,7 +34,7 @@ ARG TARGETARCH
 
 RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
-## Final image
+### Final image
 FROM debian:buster-slim
 
 RUN mkdir -p /opt/focalboard/data/files

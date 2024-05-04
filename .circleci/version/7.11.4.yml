@@ -36,7 +36,7 @@ commands:
             echo "$DOCKERHUB_PASSWORD" | docker login --username $DOCKERHUB_USERNAME --password-stdin
 
 jobs:
-  v7_11_4-cache-amd64:
+  "v7.11.4-cache-amd64":
     executor: docker-machine
     environment:
       CACHE_REPO: igorferreir4/buildcaches
@@ -130,7 +130,7 @@ workflows:
         - << pipeline.parameters.build-and-push >>
         - << pipeline.parameters.run-all >>
     jobs:
-      - v7_11_4-cache-amd64:
+      - "v7.11.4-cache-amd64":
           context: docker-geral
 
       - v7_11_4-cache-arm64:
@@ -139,7 +139,7 @@ workflows:
       - v7_11_4-build-multi-arch:
           context: docker-geral
           requires:
-            - v7_11_4-cache-amd64
+            - "v7.11.4-cache-amd64"
             - v7_11_4-cache-arm64
 
       # - v7_11_4-deploy:
